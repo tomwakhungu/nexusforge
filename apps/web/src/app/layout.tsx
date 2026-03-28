@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { GeistSans, GeistMono } from 'geist/font'
 import '@/styles/globals.css'
+import { SupabaseProvider } from '@/components/supabase-provider'
 
 export const metadata: Metadata = {
   title: 'NexusForge - AI-native PBOM & AIBOM Guardian',
@@ -32,7 +33,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable} bg-dark-bg text-white antialiased`}>
-        {children}
+        <SupabaseProvider>
+          {children}
+        </SupabaseProvider>
       </body>
     </html>
   )

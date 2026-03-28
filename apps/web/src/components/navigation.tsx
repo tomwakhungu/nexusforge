@@ -19,6 +19,12 @@ export function Navigation() {
           <Link href="#pricing" className="text-sm hover:text-neon-cyan transition-colors">
             Pricing
           </Link>
+          <Link href="/dashboard" className="text-sm hover:text-neon-cyan transition-colors">
+            Dashboard
+          </Link>
+          <Link href="/graph" className="text-sm hover:text-neon-cyan transition-colors">
+            Attack Graph
+          </Link>
           <Link href="/docs" className="text-sm hover:text-neon-cyan transition-colors">
             Docs
           </Link>

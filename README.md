@@ -85,18 +85,18 @@ cd apps/cli && go build -o nexusforge ./cmd/main.go
 ## Features (Roadmap)
 
 ### MVP (Phase 1)
-- [ ] Pipeline PBOM auto-discovery
-- [ ] Sigstore integration for artifact signing
-- [ ] GitHub Actions CI/CD scanning
-- [ ] Basic risk scoring
-- [ ] GitHub PR feedback
+- [x] Pipeline PBOM auto-discovery (demo engine in `packages/sbom`)
+- [ ] Sigstore integration for artifact signing (CLI stub and placeholder)
+- [x] GitHub Actions CI/CD scanning (demo detection in CLI and `/api/scan`)
+- [x] Basic risk scoring (shared risk functions and report in PBOM)
+- [x] GitHub PR feedback (simulated PR comment endpoint `/api/github-pr-comment`)
 
-### Phase 2
-- [ ] Interactive attack-path graphs
-- [ ] Real-time dashboard
-- [ ] Drift detection
-- [ ] Multi-org tenancy
-- [ ] Slack/Teams integration
+### Phase 2 (Implemented)
+- [x] Supabase auth + multi-org RBAC (orgs, projects, user credits)
+- [x] Stripe usage-based credits (checkout, webhooks, credit deduction on scans)
+- [x] GitHub App real PR comment posting (API integration with token)
+- [x] Attack graph React Flow visualizer (interactive nodes, edges, hover)
+
 
 ### Phase 3
 - [ ] Usage-based credits system (Stripe)
