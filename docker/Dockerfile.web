@@ -1,0 +1,28 @@
+# Build stage
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy monorepo files
+COPY package.json package-lock.json turbo.json ./
+COPY apps/web ./apps/web
+COPY packages ./packages
+COPY tsconfig.json ./
+
+# Install dependencies and build
+RUN npm ci
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy built app
+COPY --from=builder /app/apps/web/.next ./apps/web/.next
+COPY --from=builder /app/apps/web/public ./apps/web/public
+COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
+
+EXPOSE 3000
+
+CMD ["npm", "--prefix", "apps/web", "start"]
