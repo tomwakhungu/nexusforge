@@ -3,13 +3,40 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@shared": ["../../packages/shared/src/index.ts"],
-      "@shared/*": ["../../packages/shared/src/*"],
-      "@sbom": ["../../packages/sbom/src/index.ts"],
-      "@sbom/*": ["../../packages/sbom/src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@shared": [
+        "../../packages/shared/src/index.ts"
+      ],
+      "@shared/*": [
+        "../../packages/shared/src/*"
+      ],
+      "@sbom": [
+        "../../packages/sbom/src/index.ts"
+      ],
+      "@sbom/*": [
+        "../../packages/sbom/src/*"
+      ]
+    },
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

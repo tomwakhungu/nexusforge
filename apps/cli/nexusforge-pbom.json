@@ -1,0 +1,53 @@
+{
+  "version": "v0.1.0",
+  "metadata": {
+    "generatedAt": "2026-03-30T18:38:57Z",
+    "id": "48eb3e18-d314-46e1-abe0-f01af285aeac",
+    "tool": "nexusforge-cli",
+    "toolVersion": "0.1.0"
+  },
+  "components": [
+    {
+      "id": "41e2d51d-0425-4922-ad5a-e6365df5a4b0",
+      "name": "GitHub Actions",
+      "type": "ci-cd-platform",
+      "version": "v3",
+      "source": ".",
+      "riskScore": 24,
+      "riskLevel": "low",
+      "metadata": {
+        "discovered": "true"
+      }
+    },
+    {
+      "id": "6a3f2018-9ee1-4dc7-b13f-a1e8bc40cd1a",
+      "name": "Terraform",
+      "type": "iac-tool",
+      "version": "1.5.0",
+      "source": "tf",
+      "riskScore": 45,
+      "riskLevel": "medium",
+      "metadata": {
+        "workspace": "default"
+      }
+    },
+    {
+      "id": "da029aba-ef4c-461d-8cda-52ae0be0c18a",
+      "name": "OpenAI GPT-4.1",
+      "type": "ai-model",
+      "version": "2026-03-21",
+      "source": "model-registry",
+      "riskScore": 52,
+      "riskLevel": "medium",
+      "metadata": {
+        "service": "llm"
+      }
+    }
+  ],
+  "riskSummary": {
+    "criticalFindings": 0,
+    "highFindings": 1,
+    "mediumFindings": 1,
+    "overallScore": 40
+  }
+}
