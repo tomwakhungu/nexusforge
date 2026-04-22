@@ -1,13 +1,9 @@
 import { randomUUID } from 'crypto'
-import type { ScanRequest, ScanResult, PipelineComponent } from '../../../packages/shared/src/types'
 
-/**
- * Mock PBOM generator — replace with real discovery logic
- */
-export function generatePBOM(request: ScanRequest): ScanResult {
+export function generatePBOM(request: any) {
   const start = Date.now()
 
-  const mockComponents: PipelineComponent[] = [
+  const components: any[] = [
     {
       id: randomUUID(),
       name: 'GitHub Actions Runner',
@@ -31,7 +27,7 @@ export function generatePBOM(request: ScanRequest): ScanResult {
   ]
 
   if (request.includeAI) {
-    mockComponents.push({
+    components.push({
       id: randomUUID(),
       name: 'OpenAI GPT-4',
       type: 'ai-model',
@@ -43,40 +39,29 @@ export function generatePBOM(request: ScanRequest): ScanResult {
     })
   }
 
-  const scanDuration = Date.now() - start
-
   return {
     scanId: randomUUID(),
     status: 'completed',
-    scanDuration,
-    componentsFound: mockComponents.length,
+    scanDuration: Date.now() - start,
+    componentsFound: components.length,
+    creditsDeducted: 10 + components.length * 5,
     pbom: {
-      version: '1.0.0',
       metadata: {
         id: randomUUID(),
         name: `Pipeline Scan — ${new Date().toISOString()}`,
         generatedAt: new Date().toISOString(),
-        tool: 'nexusforge-scanner',
-        toolVersion: '0.1.0',
       },
-      components: mockComponents,
-      vulnerabilities: [],
-      attackPaths: [],
       riskSummary: {
         overallScore: 37,
         criticalFindings: 0,
         highFindings: 0,
         mediumFindings: 2,
       },
+      components,
     },
   }
 }
 
-/**
- * Estimate credit cost based on number of components
- */
-export function estimateCreditCost(components: PipelineComponent[]): number {
-  const base = 10
-  const perComponent = 5
-  return base + components.length * perComponent
+export function estimateCreditCost(components: any[]): number {
+  return 10 + components.length * 5
 }
