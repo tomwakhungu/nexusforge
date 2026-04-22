@@ -65,10 +65,13 @@ export function discoverGitHubActions(rootPath: string): PipelineComponent[] {
       components.push(componentFromDiscovery(`GitHub Actions: ${workflowName}`, 'ci-cd-platform', parsed?.on ? 'detected' : 'unknown', `file://${join(candidateDir, file)}`))
 
       const jobs = parsed?.jobs ?? {}
-      for (const [jobName, job] of Object.entries(jobs)) {
-        const uses = job?.steps?.filter((s: any) => typeof s === 'object' && s.uses).map((s: any) => s.uses) ?? []
-        for (const useRef of uses) {
-          components.push(componentFromDiscovery(`Action step: ${String(useRef)}`, 'plugin', 'latest', `github.com/${String(useRef)}`))
+      for (const [, job] of Object.entries(jobs)) {
+        const steps = (job as any)?.steps;
+        if (Array.isArray(steps)) {
+          const uses = steps.filter((s: any) => typeof s === 'object' && s.uses).map((s: any) => s.uses) ?? [];
+          for (const useRef of uses) {
+            components.push(componentFromDiscovery(`Action step: ${String(useRef)}`, 'plugin', 'latest', `github.com/${String(useRef)}`));
+          }
         }
       }
     }

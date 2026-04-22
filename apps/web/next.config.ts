@@ -1,6 +1,5 @@
-import type { Config } from 'next'
-
-const config: Config = {
+// Next.js 15+ does not export Config type. Use inferred config.
+const config = {
   reactStrictMode: true,
   typescript: {
     tsconfigPath: './tsconfig.json',

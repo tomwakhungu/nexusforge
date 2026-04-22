@@ -27,5 +27,8 @@
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.10.2"
   }
 }

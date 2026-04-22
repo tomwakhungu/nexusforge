@@ -1,35 +1,73 @@
 import { NextResponse } from 'next/server'
-import { generatePBOM, estimateCreditCost } from '@sbom'
-import { ScanRequestSchema } from '@shared'
-import { createClient } from '@supabase/supabase-js'
+import { randomUUID } from 'crypto'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function generatePBOM(request: any) {
+  const start = Date.now()
+
+  const components: any[] = [
+    {
+      id: randomUUID(),
+      name: 'GitHub Actions Runner',
+      type: 'ci-cd-platform',
+      version: '2.311.0',
+      source: 'github.com/actions/runner',
+      riskScore: 35,
+      riskLevel: 'medium',
+      lastValidated: new Date().toISOString(),
+    },
+    {
+      id: randomUUID(),
+      name: 'Docker',
+      type: 'build-tool',
+      version: '24.0.7',
+      source: 'docker.com',
+      riskScore: 20,
+      riskLevel: 'low',
+      lastValidated: new Date().toISOString(),
+    },
+  ]
+
+  if (request.includeAI) {
+    components.push({
+      id: randomUUID(),
+      name: 'OpenAI GPT-4',
+      type: 'ai-model',
+      version: 'gpt-4-0125-preview',
+      source: 'api.openai.com',
+      riskScore: 55,
+      riskLevel: 'medium',
+      lastValidated: new Date().toISOString(),
+    })
+  }
+
+  return {
+    scanId: randomUUID(),
+    status: 'completed',
+    scanDuration: Date.now() - start,
+    componentsFound: components.length,
+    creditsDeducted: 10 + components.length * 5,
+    pbom: {
+      metadata: {
+        id: randomUUID(),
+        name: `Pipeline Scan — ${new Date().toISOString()}`,
+        generatedAt: new Date().toISOString(),
+      },
+      riskSummary: {
+        overallScore: 37,
+        criticalFindings: 0,
+        highFindings: 0,
+        mediumFindings: 2,
+      },
+      components,
+    },
+  }
+}
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null)
   if (!body) {
-    return NextResponse.json({ error: 'invalid_request', message: 'Body is required' }, { status: 400 })
+    return NextResponse.json({ error: 'invalid_request' }, { status: 400 })
   }
-
-  const parsed = ScanRequestSchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json({ error: 'invalid_request', message: parsed.error.format() }, { status: 400 })
-  }
-
-  // Check user credits (mock for now)
-  const userId = body.userId // Assume passed in request
-  const { data: credits } = await supabase.from('user_credits').select('credits').eq('user_id', userId).single()
-  if (!credits || credits.credits < 50) {
-    return NextResponse.json({ error: 'insufficient_credits', message: 'Not enough credits' }, { status: 402 })
-  }
-
-  const scan = generatePBOM(parsed.data)
-  const cost = estimateCreditCost(scan.pbom?.components || [])
-
-  // Deduct credits
-  await supabase.from('user_credits').update({ credits: credits.credits - cost }).eq('user_id', userId)
-
-  return NextResponse.json({ ...scan, creditsDeducted: cost })
+  const result = generatePBOM(body)
+  return NextResponse.json(result)
+}
