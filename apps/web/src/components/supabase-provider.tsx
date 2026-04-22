@@ -1,26 +1,26 @@
 'use client'
 
-import { createBrowserClient } from '@supabase/ssr'
 import { createContext, useContext, useState } from 'react'
 
-const SupabaseContext = createContext<ReturnType<typeof createBrowserClient> | null>(null)
+const SupabaseContext = createContext<any>(null)
 
 export function SupabaseProvider({ children }: { children: React.ReactNode }) {
-  const [supabase] = useState(() =>
-    createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-  )
+  const [client] = useState(() => {
+    if (typeof window === 'undefined') return null
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!url || !key) return null
+    const { createBrowserClient } = require('@supabase/ssr')
+    return createBrowserClient(url, key)
+  })
+
   return (
-    <SupabaseContext.Provider value={supabase}>
+    <SupabaseContext.Provider value={client}>
       {children}
     </SupabaseContext.Provider>
   )
 }
 
 export function useSupabase() {
-  const ctx = useContext(SupabaseContext)
-  if (!ctx) throw new Error('useSupabase must be used within SupabaseProvider')
-  return ctx
+  return useContext(SupabaseContext)
 }
